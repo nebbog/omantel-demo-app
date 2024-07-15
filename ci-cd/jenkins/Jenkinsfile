@@ -1,0 +1,67 @@
+pipeline {
+  agent {
+    kubernetes {
+      yaml '''
+        apiVersion: v1
+        kind: Pod
+        spec:
+          serviceAccountName: jenkins-deployer
+          containers:
+          - name: docker
+            image: docker:latest
+            command:
+            - cat
+            tty: true
+            volumeMounts:
+             - mountPath: /var/run/docker.sock
+               name: docker-sock
+          volumes:
+          - name: docker-sock
+            hostPath:
+              path: /var/run/docker.sock    
+        '''
+    }
+  }
+  stages {
+ 
+   stage('Build tomcat image') {
+     steps{
+       container('docker') {
+         script {
+           sh 'cd ci-cd/docker;./make-image.sh -i qa'
+         }
+       }
+     }
+   }
+
+   stage('Pushing tomcat Image') {
+     environment {
+       registryCredential = 'Dockerhub-credentials'
+     }
+     steps{
+       container('docker') {
+         script {
+           withDockerRegistry([ credentialsId: 'Dockerhub-credentials', url: '' ]) {
+             sh 'cd ci-cd/docker;./push-image-to-docker-registry.sh'
+           }
+         }
+       }
+     }
+   }
+
+   stage('Deploying tomcat servlets container to Kubernetes') {
+     steps{
+       sh '''
+         curl -LO "https://get.helm.sh/helm-v3.2.4-linux-amd64.tar.gz"
+         tar zxfv helm-v3.2.4-linux-amd64.tar.gz
+         cp linux-amd64/helm .
+         curl -LO "https://storage.googleapis.com/kubernetes-release/release/v1.30.2/bin/linux/amd64/kubectl"
+         chmod u+x ./kubectl
+         export PATH=$PATH:$(pwd)
+         cd ci-cd/k8s
+         ./deploy.sh -i qa
+       '''
+     }
+   }
+ }
+}

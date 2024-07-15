@@ -1,0 +1,19 @@
+global:
+  config_version: 2
+
+input:
+  type: stdin
+grok:
+  patterns_dir: /grok/patterns
+
+metrics:
+  - name: paga_smsc_smpp_error
+    type: counter
+    help: SMSC SMPP Connection Error Count
+    match: '%{NOTSPACE:date}\s+%{NOTSPACE:time}\s+\[%{NUMBER:connection}\]\s+\[%{NUMBER:connection2}\]\s+%{LOGLEVEL:Loglevel}:\s+%{WORD:smpp}\[%{WORD:operator}\]:\s+%{GREEDYDATA:log_message}'
+    labels:
+      loglevel: '{{.Loglevel}}'
+      operator: '{{.operator}}'
+      logMessage: '{{.log_message}}'
+server:
+  port: 9144

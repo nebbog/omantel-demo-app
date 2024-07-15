@@ -1,0 +1,32 @@
+
+image:
+  tag: "1.0.13"
+
+resources:
+  limits:
+    cpu: "500m"
+    memory: "500Mi"
+  requests:
+    cpu: "100m"
+    memory: "500Mi"
+    
+exporter:
+  resources:
+    limits:
+      cpu: "500m"
+      memory: "512Mi"
+    requests:
+      cpu: "100m"
+      memory: "500Mi"
+
+kannelCredentials:
+  httpSmscUsername: "kanneluser"
+  sendSmsUserUsername: "kanneluser"
+  vensoSmscUsername: "NG.101.0116"
+
+numberOfReplicas: 1
+maxUnavailable: 1
+
+storageAccount:
+  name: "pagangqaappssa"
+  shareName: "qa-default"

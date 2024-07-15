@@ -1,0 +1,28 @@
+
+image:
+  repository: "pagangcr.azurecr.io/paga/paga-kannel"
+  pullPolicy: "IfNotPresent"
+
+resources:
+  limits:
+    cpu: "500m"
+    memory: "500Mi"
+  requests:
+    cpu: "500m"
+    memory: "500Mi"
+
+exporter:
+  image:
+    repository: "apostvav/kannel_exporter"
+    tag: "0.4.0"
+  host: "http://127.0.0.1:13000"
+  port: "9390"
+  boxConnectionTypes: "smsbox"
+
+hpa:
+  minNumberOfReplicas: 1
+  maxNumberOfReplicas: 1
+  targetAverageUtilization: 90
+
+# ensure that only one instance is running at all times
+maxUnavailable: 100%

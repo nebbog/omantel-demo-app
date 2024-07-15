@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: omanteltomcat
+  labels:
+    app: omanteltomcat
+spec:
+  serviceAccountName: omantaltomcat
+  containers:
+  - name: omantel-tomcat
+    image: nebbog/omanteltomcat:1.0.2  # image
+    env:
+    - name: JAVA_HOME
+      value: "/usr/lib/jvm/java-11-openjdk-amd64/"
+    ports:
+    - containerPort: 8080
