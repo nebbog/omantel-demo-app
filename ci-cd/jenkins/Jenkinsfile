@@ -8,7 +8,7 @@ pipeline {
           serviceAccountName: jenkins-deployer
           containers:
           - name: docker
-            image: docker:dind
+            image: docker:latest
             command:
             - cat
             tty: true
@@ -24,7 +24,17 @@ pipeline {
   }
   stages {
  
-   stage('Build tomcat image') {
+   stage('Build Java project - demo-app') {
+     steps{
+       container('docker') {
+         script {
+           sh 'cd ci-cd;./build.sh'
+         }
+       }
+     }
+   }
+
+   stage('Build demo-app tomcat image') {
      steps{
        container('docker') {
          script {
@@ -34,7 +44,7 @@ pipeline {
      }
    }
 
-   stage('Pushing tomcat Image') {
+   stage('Pushing demo-app tomcat Image') {
      environment {
        registryCredential = 'Dockerhub-credentials'
      }
