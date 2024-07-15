@@ -8,7 +8,7 @@ pipeline {
           serviceAccountName: jenkins-deployer
           containers:
           - name: docker
-            image: docker:latest
+            image: nebbog/dockerbash:1.0.0
             command:
             - cat
             tty: true
