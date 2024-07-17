@@ -10,7 +10,6 @@ pipeline {
           - name: docker
             image: nebbog/dockerbash:1.2.0
             command:
-            - cat
             - bash
             args: ["-c", "export PATH=/tmp:$PATH"]
             tty: true
