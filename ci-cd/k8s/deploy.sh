@@ -30,7 +30,7 @@ helm template ./helm \
     -f "${ENV_CONFIG}" \
     --set image.tag="${DEMO_APP_VERSION}" \
     --namespace "${NAMESPACE}" \
-    | kubectl apply --namespace "${NAMESPACE}" -f -
+    | kubectl apply --namespace "${NAMESPACE}" -f - -o yaml --dry-run
 
 
 
