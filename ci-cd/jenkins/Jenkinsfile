@@ -9,9 +9,8 @@ pipeline {
           containers:
           - name: docker
             image: nebbog/dockerbash:1.2.0
-            env:
-            - name: PATH
-              value: "$PATH:/tmp"
+            args:
+            - PATH="$PATH:/tmp" docker 
             command:
             - cat
             tty: true
