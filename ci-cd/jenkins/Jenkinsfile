@@ -64,9 +64,11 @@ pipeline {
        script {
           sh 'curl -LO "https://storage.googleapis.com/kubernetes-release/release/v1.30.2/bin/linux/amd64/kubectl"'
           sh 'chmod u+x ./kubectl'
+          sh 'cp ./kubectl /tmp'
           sh 'curl -LO https://get.helm.sh/helm-v3.15.3-linux-amd64.tar.gz'
           sh 'tar -zxvf helm-v3.15.3-linux-amd64.tar.gz'
-          sh 'export PATH=$PATH:$(pwd):$(pwd)/linux-amd64'
+          sh 'cp linux-amd64/helm /tmp'
+          sh 'export PATH=$PATH:/tmp'
           sh 'kubectl version;helm version'
           sh 'cd ci-cd/k8s;./deploy.sh'
        }
