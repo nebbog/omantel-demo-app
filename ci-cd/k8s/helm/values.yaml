@@ -1,28 +1,33 @@
-
 image:
-  repository: "pagangcr.azurecr.io/paga/paga-kannel"
+  repository: "nebbog/demo-app"
   pullPolicy: "IfNotPresent"
 
-resources:
-  limits:
-    cpu: "500m"
-    memory: "500Mi"
-  requests:
-    cpu: "500m"
-    memory: "500Mi"
+readinessProbe:
+  initialDelaySeconds: 60
 
-exporter:
-  image:
-    repository: "apostvav/kannel_exporter"
-    tag: "0.4.0"
-  host: "http://127.0.0.1:13000"
-  port: "9390"
-  boxConnectionTypes: "smsbox"
+livenessProbe:
+  initialDelaySeconds: 60
 
-hpa:
-  minNumberOfReplicas: 1
-  maxNumberOfReplicas: 1
-  targetAverageUtilization: 90
+rollingUpdate:
+  maxUnavailable: 40%
 
-# ensure that only one instance is running at all times
-maxUnavailable: 100%
+rbac:
+  role:
+    rules:
+    - apiGroups:
+      - ''
+      resources:
+      - pods
+      - configmaps
+      verbs:
+      - get
+      - watch
+      - list
+    - apiGroups:
+      - ''
+      resources:
+      - services
+      verbs:
+      - get
+      - list
+      - watch

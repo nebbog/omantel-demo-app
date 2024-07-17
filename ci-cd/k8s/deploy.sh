@@ -1,35 +1,18 @@
 #!/usr/bin/env bash
 
-# the command below is out of date?
-#./deploy.sh -r ng -e qa"
-usage() { echo "Usage: $0  -i <infrastructure>" 1>&2; exit 1; }
-
 set -e
+set -x
+printf "\n\nDeploying Project...\n\n"
 
-declare inf=""
-declare helmOptions=""
+CWD=`pwd`
 
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
-# Initialize parameters specified from command line
-while getopts ":i:" arg; do
-	case "${arg}" in
-		i)
-			inf=${OPTARG}
-			;;
+cd "${SCRIPT_DIR}"
 
-		esac
-done
-shift $((OPTIND-1))
+source ../lib-common.sh
 
-
-if [[ -z "$inf" ]]; then
-
-    echo "infrastructure is required"
-    usage
-    exit 1
-fi
-
-ENV_CONFIG="helm/env/${inf}/values.yaml"
+ENV_CONFIG="helm/env/values.yaml"
 
 if [ ! -f "${ENV_CONFIG}" ] ; then
 
@@ -38,19 +21,20 @@ if [ ! -f "${ENV_CONFIG}" ] ; then
 
 fi
 
-NAMESPACE=${inf}-tomcat
+NAMESPACE=demo-tomcat
 
-set -e
-set +x
-
-kubectl get ns ${NAMESPACE}
-
+#set -e
+#set +x
 
 helm template ./helm \
-    -f ${ENV_CONFIG} \
-    --set inf=${inf}\
-    --namespace ${NAMESPACE} \
-    | kubectl apply --namespace ${NAMESPACE} -f -
+    -f "${ENV_CONFIG}" \
+    --set image.tag="${DEMO_APP_VERSION}" \
+    --namespace "${NAMESPACE}" \
+    | kubectl apply --namespace "${NAMESPACE}" -f -
 
-set +x
-set +e
+
+
+
+#set +e
+
+cd "${CWD}"
