@@ -9,6 +9,9 @@ pipeline {
           containers:
           - name: docker
             image: nebbog/dockerbash:1.2.0
+            env:
+            - name: PATH
+              value: "$PATH:/tmp"
             command:
             - cat
             tty: true
@@ -63,12 +66,9 @@ pipeline {
      steps{
        script {
           sh 'curl -LO "https://storage.googleapis.com/kubernetes-release/release/v1.30.2/bin/linux/amd64/kubectl"'
-          sh 'chmod a+x ./kubectl'
-          sh 'cp ./kubectl /bin'
+          sh 'chmod a+x ./kubectl;cp ./kubectl /tmp'
           sh 'curl -LO https://get.helm.sh/helm-v3.15.3-linux-amd64.tar.gz'
-          sh 'tar -zxvf helm-v3.15.3-linux-amd64.tar.gz'
-          sh 'cp linux-amd64/helm /bin'
-          sh 'ls -lrth /tmp'
+          sh 'tar -zxvf helm-v3.15.3-linux-amd64.tar.gz;cp linux-amd64/helm /bin'
           sh 'kubectl version;helm version'
           sh 'cd ci-cd/k8s;./deploy.sh'
        }
