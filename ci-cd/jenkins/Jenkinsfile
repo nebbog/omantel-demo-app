@@ -67,7 +67,6 @@ pipeline {
           sh 'curl -LO https://get.helm.sh/helm-v3.15.3-linux-amd64.tar.gz'
           sh 'tar -zxvf helm-v3.15.3-linux-amd64.tar.gz'
           sh 'export PATH=$PATH:$(pwd)'
-          sh 'mv linux-amd64/helm kubectl /usr/local/bin'
           sh 'cd ci-cd/k8s;./deploy.sh'
        }
      }
