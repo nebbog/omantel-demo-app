@@ -59,13 +59,5 @@ pipeline {
      }
    }
 
-   stage('Deploying to minikube cluster') {
-     steps{
-       script {
-          sh 'cd ci-cd/k8s;./deploy.sh'
-       }
-     }
-   }
-
  }
 }
