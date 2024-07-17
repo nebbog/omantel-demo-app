@@ -9,10 +9,10 @@ pipeline {
           containers:
           - name: docker
             image: nebbog/dockerbash:1.2.0
-            args:
-            - PATH="$PATH:/tmp" docker 
             command:
             - cat
+            - bash
+            args: ["-c", "export PATH=/tmp:$PATH"]
             tty: true
             volumeMounts:
              - mountPath: /var/run/docker.sock
