@@ -5,8 +5,8 @@ pipeline {
         apiVersion: v1
         kind: Pod
         spec:
-          containers:
           serviceaccount: jenkins-deployer
+          containers:
           - name: docker
             image: nebbog/dockerbash:1.2.0
             command:
