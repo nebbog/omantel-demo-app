@@ -61,13 +61,15 @@ pipeline {
    
     stage('Deploying to minikube cluster') {
      steps{
-       script {
-          sh 'curl -LO "https://storage.googleapis.com/kubernetes-release/release/v1.30.2/bin/linux/amd64/kubectl"'
-          sh 'chmod a+x ./kubectl;cp ./kubectl /tmp'
-          sh 'curl -LO https://get.helm.sh/helm-v3.15.3-linux-amd64.tar.gz'
-          sh 'tar -zxvf helm-v3.15.3-linux-amd64.tar.gz;cp linux-amd64/helm /tmp'
-          sh 'kubectl version;helm version'
-          sh 'cd ci-cd/k8s;./deploy.sh'
+       container('docker') {
+         script {
+            sh 'curl -LO "https://storage.googleapis.com/kubernetes-release/release/v1.30.2/bin/linux/amd64/kubectl"'
+            sh 'chmod a+x ./kubectl;cp ./kubectl /tmp'
+            sh 'curl -LO https://get.helm.sh/helm-v3.15.3-linux-amd64.tar.gz'
+            sh 'tar -zxvf helm-v3.15.3-linux-amd64.tar.gz;cp linux-amd64/helm /tmp'
+            sh 'kubectl version;helm version'
+            sh 'cd ci-cd/k8s;./deploy.sh'
+         }
        }
      }
    }
