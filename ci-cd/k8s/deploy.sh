@@ -29,8 +29,8 @@ NAMESPACE=demo-tomcat
 helm template ./helm \
     -f "${ENV_CONFIG}" \
     --set image.tag="${DEMO_APP_VERSION}" \
-    --namespace "${NAMESPACE}"
-#    | kubectl apply --namespace "${NAMESPACE}" -f - -o yaml --dry-run
+    --namespace "${NAMESPACE}" \
+    | kubectl apply --namespace "${NAMESPACE}" -f - -o yaml --dry-run=client
 
 
 
