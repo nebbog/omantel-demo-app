@@ -8,10 +8,9 @@ pipeline {
           serviceaccount: jenkins-deployer
           containers:
           - name: docker
-            image: nebbog/dockerbash:1.2.0
+            image: nebbog/dockerbash:1.3.0
             command:
-            - bash
-            args: ["-c", "export PATH=/tmp:$PATH"]
+            - cat
             tty: true
             volumeMounts:
              - mountPath: /var/run/docker.sock
@@ -66,7 +65,7 @@ pipeline {
           sh 'curl -LO "https://storage.googleapis.com/kubernetes-release/release/v1.30.2/bin/linux/amd64/kubectl"'
           sh 'chmod a+x ./kubectl;cp ./kubectl /tmp'
           sh 'curl -LO https://get.helm.sh/helm-v3.15.3-linux-amd64.tar.gz'
-          sh 'tar -zxvf helm-v3.15.3-linux-amd64.tar.gz;cp linux-amd64/helm /bin'
+          sh 'tar -zxvf helm-v3.15.3-linux-amd64.tar.gz;cp linux-amd64/helm /tmp'
           sh 'kubectl version;helm version'
           sh 'cd ci-cd/k8s;./deploy.sh'
        }
